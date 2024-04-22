@@ -205,7 +205,20 @@ impl Lex{
 
     pub fn print(&self){
         for token in & self.tokens{
-            println!("ltrl: {}",token.literal);
+            let mut string;
+            match token.kind {
+                TokenType::OPENBRACE => string="OPENBRACE",
+                TokenType::CLOSEBRACE => string="CLOSEBRACE",
+                TokenType::OPENPARENTHESIS => string="OPENPARENTHESIS",
+                TokenType::CLOSEPARENTHESIS => string="CLOSEPARENTHESIS",
+                TokenType::SEMICOLON => string="SEMICOLON",
+                TokenType::COMMA => string="COMMA",
+                TokenType::KEYWORD => string="KEYWORD",
+                TokenType::IDENTIFIER => string="IDENTIFIER",
+                TokenType::INTLITERAL => string="INTLITERAL",
+                TokenType::EOF => string="EOF",
+            };
+            println!("ltrl:     {}  token:      {}",token.literal,string);
         }
     }
 

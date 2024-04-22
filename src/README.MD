@@ -60,5 +60,31 @@
                             else
                                 if not then assign valid punctuation mark 
                             return token object 
+
+
 - Parser
+    -To transform a list of tokens into an AST, we’ll use a technique called recursive descent parsing. We’ll define a function to parse each non-terminal symbol in the grammar and return a corresponding AST node. The function to parse symbol S should remove tokens from the start of the list until it reaches a valid derivation of S. If, before it’s done parsing, it hits a token that isn’t in the production rule for S, it should fail. If the rule for S contains other non-terminals, it should call other functions to parse them.
+
+    Here’s the pseudocode for parsing a statement:
+'''
+    def parse_statement(tokens):
+        tok = tokens.next()
+        if tok.type != "RETURN_KEYWORD":
+        fail()
+            tok = tokens.next()
+        if tok.type != "INT"
+          fail()
+        exp = parse_exp(tokens) //parse_exp will pop off more tokens
+        statement = Return(exp)
+        tok = tokens.next()
+        if tok.type != "SEMICOLON":
+            fail()
+        return statement
+    '''
+Later, the production rules will be recursive (e.g. an arithmetic expression can contain other expressions), which means the parsing functions will be recursive too - hence the name recursive descent parser.
+Task:
+
+Write a parse function that accepts a list of tokens and returns an AST, rooted at a Program node. The function should build the correct AST for all valid stage 1 examples, and raise an error on all invalid stage 1 examples. If you want, you can also have your parser fail gracefully if it encounters integers above your system’s INT_MAX.
+
+There are a lot of ways to represent an AST in code - each type of node could be its own class or its own datatype, depending on what language you’re writing your compiler in. For example, here’s how you might define AST nodes as OCaml datatypes:
 - Code Generation

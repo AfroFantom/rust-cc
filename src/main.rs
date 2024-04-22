@@ -1,4 +1,5 @@
 use std::env;
+use std::collections::{HashSet};
 use std::error::Error;
 use std::io::{self,BufReader,BufRead};
 use std::fs::File;
@@ -11,12 +12,12 @@ enum TokenType{
     CLOSEPARENTHESIS,
     SEMICOLON,
     COMMA,
-    KEYWORDTYPE,
+    KEYWORD,
     IDENTIFIER,
     INTLITERAL,
-    CHARLITERAL,
     EOF,
 }
+
 
 pub struct Token{
     kind: TokenType,
@@ -38,20 +39,31 @@ impl Token{
 
 }
 
+// assign numeric literals their tokens 
+    //TODO: add functionality for float literals as well 
 pub fn numeric_literal_tokeniser(literal:String,start:usize,end:usize,line:usize) -> Token{ 
     Token::new(TokenType::INTLITERAL, literal, start, end, line)
 }
     
-pub fn string_literal_tokeniser(literal:String,start:usize,end:usize,line:usize) -> Token{ 
-    match literal{
-         {
-            return Token::new(TokenType::IDENTIFIER,literal, start, end, line);
-        },
-        _ => {
-            return Token::new(TokenType::CHARLITERAL,literal,start,end,line);
-        } 
-    }
+// assign sting literals theirs tokens and return them 
+// ascertain if the literal is a keyword or an identifier 
+//keywords would in a reserved set capable of instant lookup 
+
+pub fn string_literal_tokeniser(literal:&String,start:usize,end:usize,line:usize) -> Token{ 
+    let keywords = HashSet::from([
+        "int",
+        "float",
+        "char",
+        "return",
+        "struct"
+        ]);
+    if keywords.contains(&literal.as_str()){
+        return Token::new(TokenType::KEYWORD,literal.to_string(), start, end, line);
+    }else{
+        return Token::new(TokenType::IDENTIFIER,literal.to_string(),start,end,line);
+    } 
 }
+
 
 pub struct Lex{
     text: Text,
@@ -63,7 +75,7 @@ impl Lex{
         Self { text: (text), tokens: (Vec::new()) }
     }
 
-    fn run(&mut self) {
+    pub fn run(&mut self) {
         
         //runs the lexer loop on the associated text field, calls tokeniser every time new character is introduced
         //tokeniser runs, returns control and the loop continues until text is over
@@ -91,7 +103,9 @@ impl Lex{
                 }
                 if !buf.is_empty(){
                     println!("lex run found string-literal: {} pass: {}",buf,pass);
-                    string_literal_tokeniser(buf.clone(), start, self.text.offset, self.text.line);
+                    self.tokens.push(
+                        string_literal_tokeniser(&buf.clone(), start, self.text.offset, self.text.line)
+                    );
                     buf.clear();
                 }
                 let start = self.text.offset;
@@ -107,7 +121,9 @@ impl Lex{
                 }
                 if !buf.is_empty(){
                     println!("lex run found numeric-literal: {} pass: {}",buf,pass);
-                    numeric_literal_tokeniser(buf.clone(), start, self.text.offset, self.text.line);
+                    self.tokens.push(
+                        numeric_literal_tokeniser(buf.clone(), start, self.text.offset, self.text.line)
+                    );
                     buf.clear();
                 }
 
@@ -122,6 +138,7 @@ impl Lex{
                             self.text.offset,
                             self.text.line);
                             println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                            self.tokens.push(tok);
                     },
                     '(' => {
                         let tok = Token::new(
@@ -131,6 +148,7 @@ impl Lex{
                             self.text.offset,
                             self.text.line);
                             println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                            self.tokens.push(tok);
                     },
                     '{' => {
                         let tok = Token::new(
@@ -140,6 +158,7 @@ impl Lex{
                             self.text.offset,
                             self.text.line);
                             println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                            self.tokens.push(tok);
                     },
                     '}' => {
                         let tok = Token::new(
@@ -149,6 +168,7 @@ impl Lex{
                             self.text.offset,
                             self.text.line);
                             println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                            self.tokens.push(tok);
                     },
                     ';' => {
                         let tok = Token::new(
@@ -158,6 +178,7 @@ impl Lex{
                             self.text.offset,
                                 self.text.line);
                                 println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                                self.tokens.push(tok);
                     },
                     ',' => {
                         let tok = Token::new(
@@ -168,6 +189,7 @@ impl Lex{
                             self.text.line
                             );
                             println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
+                            self.tokens.push(tok);
                     },
                     _ => println!("not a valid match pass:{}",pass),
                 }
@@ -178,7 +200,15 @@ impl Lex{
                 pass+=1;
            }
         }
+        self.tokens.push(Token::new(TokenType::EOF, "EOF".to_string(), self.text.offset, self.text.offset, self.text.line))
     }
+
+    pub fn print(&self){
+        for token in & self.tokens{
+            println!("ltrl: {}",token.literal);
+        }
+    }
+
 }
 
 
@@ -216,7 +246,7 @@ impl Text{
                 buf.push('\0');
                 break;
             }
-            let mut temp:String= buf.clone();
+            let temp:String= buf.clone();
             //println!("text read_source idx: {} temp/buf:{}",idx,temp);
             idx+=1;
             output.push(temp);
@@ -284,5 +314,5 @@ fn main(){
     //let _= print(&txt);
     let mut lexer:Lex = Lex::new(txt);
     let _= lexer.run();
-
+    let _= lexer.print();
 }

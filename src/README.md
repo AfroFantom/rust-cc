@@ -41,6 +41,8 @@ cargo run -file
                 
             "bar"= TOKEN::BAR 
         ```
+        - ![alt text](image.png)
+
     - PseudoCode: 
         ```markdown
             Parse(){

@@ -34,7 +34,14 @@ cargo run -file
             <statement> ::= "return" <exp> ";"
             <exp> ::= <int>
         ```
-    - PseudoCode:
+    - Translation Rules: 
+        ```markdown
+            <foo>=if TOKEN::FOO 
+                        then foo()
+                
+            "bar"= TOKEN::BAR 
+        ```
+    - PseudoCode: 
         ```markdown
             Parse(){
 

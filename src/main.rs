@@ -1,10 +1,9 @@
 mod lib {
     pub mod lexer;
+    pub mod text;
+    pub mod token;
 }
 use lib::lexer::Lex;
-
-
-
 
 //fn print(text:&Text){
 //    let mut idx =0 ;
@@ -12,8 +11,6 @@ use lib::lexer::Lex;
 //        println!("print.util idx: {} line: {}",idx,line);
 //    }
 //}
-
-
 
 fn main(){
     //let _= print(&txt);

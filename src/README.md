@@ -23,7 +23,7 @@ cargo run -file
  - break down the subcomponents further
  - recursively descend down this line of subcomponents
  - use rules to call the necessary functions
-**Find way to translate rules, Draft accurate rules**
+ - **Find way to translate rules, Draft accurate rules**
  - control keeps going down until 
 
 ### Code-Gen

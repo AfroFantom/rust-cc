@@ -17,14 +17,14 @@ cargo run -file
 
 - Parser class that performs recursive descent on a vec! of tokens that is then used to ascertain the flow of the program, by making an ast of the source code 
 ##### flow of program 
-    - Init a class of AST 
-       - root at start of program (root -> Program)
-        - children are the subcomponents of Program
-        - break down the subcomponents further
-            - recursively descend down this line of subcomponents
-            - use rules to call the necessary functions
-            - *** Find way to translate rules, Draft accurate rules ***
-            - control keeps going down until 
+- Init a class of AST 
+ - root at start of program (root -> Program)
+ - children are the subcomponents of Program
+ - break down the subcomponents further
+ - recursively descend down this line of subcomponents
+ - use rules to call the necessary functions
+ - *** Find way to translate rules, Draft accurate rules ***
+ - control keeps going down until 
 
 ### Code-Gen
 - Code-gen class that gives us a generated assembly file after being paramterised with the AST of the associated source code

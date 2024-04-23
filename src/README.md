@@ -16,7 +16,7 @@ cargo run -file
 ### Parser
 
 - Parser class that performs recursive descent on a vec! of tokens that is then used to ascertain the flow of the program, by making an ast of the source code 
-- #### flow of program 
+- #### Parse() Notes 
     - Init a class of AST 
     - root at start of program (root -> Program)
     - children are the subcomponents of Program
@@ -25,18 +25,21 @@ cargo run -file
     - use rules to call the necessary functions
     - **Find way to translate rules, Draft accurate rules**
     - control keeps going down until we find terminal tokens
-    - two types of tokens, they either call a function or return a ast node obj
-    - each call to a function eventually will return an AST object 
-        - Rules:
-            ```markdown
-            
-            ```
-        - PseudoCode:
-            ```markdown
+        - two types of tokens, they either call a function or return a ast node obj
+        - each call to a function eventually will return an AST object 
+    - Rules:
+        ```markdown
+            <program> ::= <function>
+            <function> ::= "int" <id> "(" ")" "{"  <statement>  "}" 
+            <statement> ::= "return" <exp> ";"
+            <exp> ::= <int>
+        ```
+    - PseudoCode:
+        ```markdown
             Parse(){
 
             }
-            ```
+        ```
 
 
 ### Code-Gen

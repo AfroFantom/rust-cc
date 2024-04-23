@@ -1,10 +1,3 @@
-use std::env;
-use std::collections::{HashSet};
-use std::error::Error;
-use std::io::{self,BufReader,BufRead};
-use std::fs::File;
-use regex;
-
 mod lib {
     pub mod lexer;
 }

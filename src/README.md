@@ -16,7 +16,7 @@ cargo run -file
 ### Parser
 
 - Parser class that performs recursive descent on a vec! of tokens that is then used to ascertain the flow of the program, by making an ast of the source code 
-##### flow of program 
+#### flow of program 
 - Init a class of AST 
  - root at start of program (root -> Program)
  - children are the subcomponents of Program

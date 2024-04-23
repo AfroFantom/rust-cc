@@ -29,7 +29,6 @@ impl Text{
         let f = File::open(filename).expect("File not opening");
         let mut f = BufReader::new(f);
         let mut output:Vec<String> = Vec::new();
-        let mut idx:usize = 0;
         let mut buf:String  = String::new();
         while let Ok(n) = f.read_line(&mut buf){
             //EOF
@@ -39,7 +38,6 @@ impl Text{
             }
             let temp:String= buf.clone();
             //println!("text read_source idx: {} temp/buf:{}",idx,temp);
-            idx+=1;
             output.push(temp);
             buf.clear();
         }

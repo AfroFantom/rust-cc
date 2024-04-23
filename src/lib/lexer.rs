@@ -1,5 +1,5 @@
-use     crate::lib::text::Text;
-use     crate::lib::token::{Token,TokenType};
+use crate::lib::text::Text;
+use crate::lib::token::{Token,TokenType};
 
 
 use std::{collections::HashSet, env};
@@ -19,7 +19,7 @@ pub fn numeric_literal_tokeniser(literal:String,start:usize,end:usize,line:usize
 pub fn string_literal_tokeniser(literal:&String,start:usize,end:usize,line:usize) -> Token{ 
     let keywords = HashSet::from([
         "int","float","char","return",
-        "struct","if","else",]);
+        "struct",]);
     if keywords.contains(&literal.as_str()){
         return Token::new(TokenType::KEYWORD,literal.to_string(), start, end, line);
     }else{
@@ -78,9 +78,37 @@ impl Lex{
                 }
                 if !buf.is_empty(){
                     //println!("lex run found string-literal: {} pass: {}",buf,pass);
-                    self.tokens.push(
-                        string_literal_tokeniser(&buf.clone(), start, self.text.get_offset(), self.text.get_line())
-                    );
+                    match buf.as_str(){
+                        "if" => {
+                            let tok = Token::new(
+                                TokenType::IF,
+                                "if".to_string(),
+                                start,
+                                self.text.get_offset(),
+                                self.text.get_line(),
+
+                            );
+                            self.tokens.push(tok)
+                        }
+                        "else" => {
+                            let tok = Token::new(
+                                TokenType::ELSE,
+                                "if".to_string(),
+                                start,
+                                self.text.get_offset(),
+                                self.text.get_line(),
+
+                            );
+                            self.tokens.push(tok)
+                        }
+                        _ => {self.tokens.push(
+                                    string_literal_tokeniser(&buf.clone(), 
+                                                            start, 
+                                                            self.text.get_offset(), 
+                                                            self.text.get_line())
+                            )
+                        }
+                    }
                     buf.clear();
                 }
                 let start = self.text.get_offset();

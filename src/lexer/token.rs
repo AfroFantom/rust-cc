@@ -10,7 +10,11 @@ pub enum TokenType{
     ELSE,
     COMMA,
     KEYWORD,
+    ASSIGN,
     IDENTIFIER,
+    NIL,
+    NEWLINE,
+    WHITESPACE,
     INTLITERAL,
     EOF,
 }
@@ -33,6 +37,7 @@ impl Token{
             line: (line)
         }
     }
+    
 
     pub fn get_class(&self) -> &TokenType{&self.class}
 

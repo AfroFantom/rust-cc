@@ -1,10 +1,15 @@
-mod lib {
+mod parser{
+    pub mod parser;
+}
+
+
+mod lexer {
     pub mod lexer;
     pub mod text;
     pub mod token;
 }
-use lib::lexer::Lex;
-
+use lexer::lexer::Lex;
+//use parser::parser::Parser;
 //fn print(text:&Text){
 //    let mut idx =0 ;
 //    for line in text.source.iter(){

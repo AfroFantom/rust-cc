@@ -1,5 +1,5 @@
-use crate::lib::text::Text;
-use crate::lib::token::{Token,TokenType};
+use crate::lexer::text::Text;
+use crate::lexer::token::{Token,TokenType};
 
 
 use std::{collections::HashSet, env};
@@ -26,6 +26,26 @@ pub fn string_literal_tokeniser(literal:&String,start:usize,end:usize,line:usize
         return Token::new(TokenType::IDENTIFIER,literal.to_string(),start,end,line);
     } 
 }
+
+//assign the tokentype enum variant for the given char ch variable
+pub fn char_literal_tokeniser(ch:char) -> TokenType{
+    match ch{
+        //' ' => {println!("lex.run() found a whitespace pass:{}",pass)},
+        ')' => return TokenType::OPENBRACE,
+        '(' => return TokenType::CLOSEBRACE,
+        '{' => return TokenType::OPENPARENTHESIS,
+        '}' => return TokenType::CLOSEPARENTHESIS,
+        ';' => return TokenType::SEMICOLON,
+        ',' => return TokenType::COMMA,
+        '>' => return TokenType::GREATERTHAN,
+        '<' => return TokenType::LESSTHAN,
+        '=' => return TokenType::ASSIGN,
+        '\n'=> return TokenType::NEWLINE, 
+        ' ' => return TokenType::WHITESPACE,
+        _ => return TokenType::NIL,
+    }
+}
+
 
 
 pub struct Lex{
@@ -93,7 +113,7 @@ impl Lex{
                         "else" => {
                             let tok = Token::new(
                                 TokenType::ELSE,
-                                "if".to_string(),
+                                "else".to_string(),
                                 start,
                                 self.text.get_offset(),
                                 self.text.get_line(),
@@ -125,107 +145,36 @@ impl Lex{
                 if !buf.is_empty(){
                     //println!("lex run found numeric-literal: {} pass: {}",buf,pass);
                     self.tokens.push(
-                        numeric_literal_tokeniser(buf.clone(), start, self.text.get_offset(), self.text.get_line())
+                        numeric_literal_tokeniser(buf.clone()
+                                                , start
+                                                , self.text.get_offset()
+                                                , self.text.get_line())
                     );
                     buf.clear();
                 }
 
+                let start= self.text.get_offset();
                 let ch = self.text.loc();
-                match ch{
-                    //' ' => {println!("lex.run() found a whitespace pass:{}",pass)},
-                    ')' =>{
-                        let tok = Token::new(
-                            TokenType::OPENBRACE,
-                            ")".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line());
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    '(' => {
-                        let tok = Token::new(
-                            TokenType::CLOSEBRACE,
-                            "(".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line());
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    '{' => {
-                        let tok = Token::new(
-                            TokenType::OPENPARENTHESIS,
-                            "{".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line());
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    '}' => {
-                        let tok = Token::new(
-                            TokenType::CLOSEPARENTHESIS,
-                            "}".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line());
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    ';' => {
-                        let tok = Token::new(
-                            TokenType::SEMICOLON,
-                            ";".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                                self.text.get_line());
-                                //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                                self.tokens.push(tok);
-                    },
-                    ',' => {
-                        let tok = Token::new(
-                            TokenType::COMMA,
-                            ",".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line()
-                            );
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    '>' => {
-                        let tok = Token::new(
-                            TokenType::GREATERTHAN,
-                            ">".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line()
-                            );
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    '<' => {
-                        let tok = Token::new(
-                            TokenType::LESSTHAN,
-                            "<".to_string(),
-                            self.text.get_offset(),
-                            self.text.get_offset(),
-                            self.text.get_line()
-                            );
-                            //println!("lex.run() found grammar-literal:{} pass: {}",ch,pass);
-                            self.tokens.push(tok);
-                    },
-                    _ => println!("not a valid match pass:{}",pass),
-                }
-                
+                let toktype = char_literal_tokeniser(ch); 
+                let tok= Token::new(
+                    toktype
+                    , ch.to_string()
+                    ,start
+                    ,self.text.get_offset()
+                    , self.text.get_line()
+                );
+                self.tokens.push(tok);
                 //println!("lex.run: {} char: {}",pass,ch1);
                 
                 self.text.advance();
                 pass+=1;
            }
         }
-        self.tokens.push(Token::new(TokenType::EOF, "EOF".to_string(), self.text.get_offset(), self.text.get_offset(), self.text.get_line()))
+        self.tokens.push(Token::new(TokenType::EOF
+                            , "EOF".to_string()
+                            , self.text.get_offset()
+                            , self.text.get_offset()
+                            , self.text.get_line()))
     }
 
     pub fn print(&self){
@@ -246,6 +195,10 @@ impl Lex{
                 TokenType::LESSTHAN => string="<",
                 TokenType::IF => string="IF",
                 TokenType::ELSE => string="ELSE",
+                TokenType::ASSIGN => string="=",
+                TokenType::NIL => string="NIL",
+                TokenType::NEWLINE => string="n",
+                TokenType::WHITESPACE => string="WHITESPACE",
             };
             println!("ltrl:     {}  token:      {}",token.get_literal(),string);
         }

@@ -31,8 +31,8 @@ cargo run -file
         ```markdown
             <program> ::= <function>
             <function> ::= "int" <id> "(" ")" "{"  <statement>  "}" 
-            <statement> ::= "return" <exp> ";"
-            <exp> ::= <int>
+            <statement> ::= "return" <exp> ";" | "int" <id> "=" <int> ";"
+            <exp> ::= <int>|<char>|<float>|<bool>
         ```
     - Translation Rules: 
         ```markdown
@@ -51,3 +51,5 @@ cargo run -file
 
 ### Code-Gen
 - Code-gen class that gives us a generated assembly file after being paramterised with the AST of the associated source code
+    - Create an empty buffer
+    - Load it with each sequential instruction from the ast 

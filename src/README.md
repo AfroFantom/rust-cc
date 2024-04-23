@@ -27,6 +27,11 @@ cargo run -file
  - control keeps going down until we find terminal tokens
     - two types of tokens, they either call a function or return a ast node obj
     - each call to a function eventually will return an AST object 
+- PseudoCode:
+    ```markdown
+    
+    ```
+
 
 ### Code-Gen
 - Code-gen class that gives us a generated assembly file after being paramterised with the AST of the associated source code

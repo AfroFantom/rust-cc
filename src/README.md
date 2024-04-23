@@ -24,7 +24,9 @@ cargo run -file
  - recursively descend down this line of subcomponents
  - use rules to call the necessary functions
  - **Find way to translate rules, Draft accurate rules**
- - control keeps going down until 
+ - control keeps going down until we find terminal tokens
+    - two types of tokens, they either call a function or return a ast node obj
+    - each call to a function eventually will return an AST object 
 
 ### Code-Gen
 - Code-gen class that gives us a generated assembly file after being paramterised with the AST of the associated source code

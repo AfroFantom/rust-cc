@@ -51,13 +51,15 @@ pub fn char_literal_tokeniser(ch:char) -> TokenType{
 pub struct Lex{
     text: Text,
     tokens: Vec<Token>,
+    i:usize,
 }
 
 impl Lex{
     pub fn new(text:Text) -> Self {
         Self {
             text: (text),
-            tokens: (Vec::new())
+            tokens: (Vec::new()),
+            i:(0)
          }
     }
     pub fn seed()->Lex{
@@ -69,7 +71,6 @@ impl Lex{
         let lex = Lex::new(txt);
         lex
     }
-
     pub fn run(&mut self) {
         
         //runs the lexer loop on the associated text field, calls tokeniser every time new character is introduced
@@ -202,7 +203,28 @@ impl Lex{
             };
             println!("ltrl:     {}  token:      {}",token.get_literal(),string);
         }
+   }
+   //lexer util functions
+    pub fn loc_tok(&self,i:usize) ->&Token{
+        self.tokens.get(i).unwrap()
     }
+
+    pub fn get_tok(&self) -> &Token{
+        self.tokens.get(self.i).unwrap()
+    }
+
+    pub fn peek_tok(&self) -> &Token{
+        let i=self.i+1;
+        self.loc_tok(i)
+    }
+
+   pub fn is_tokens_empty(&self) -> bool{
+        self.tokens.len() == self.i
+   }
+
+   pub fn get_tokens_len(&self) -> usize { 
+        self.tokens.len() 
+   }
 
 }
 

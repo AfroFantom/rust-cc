@@ -29,10 +29,10 @@ cargo run -file
         - each call to a function eventually will return an AST object 
     - Rules:
         ```markdown
-            <program> ::= <function>
+            <program> ::= <function>+
             <function> ::= "int" <id> "(" ")" "{"  <statement>  "}" 
             <statement> ::= "return" <exp> ";" | "int" <id> "=" <int> ";"
-            <exp> ::= <int>|<char>|<float>|<bool>
+            <exp> ::= <int>
         ```
     - Translation Rules: 
         ```markdown

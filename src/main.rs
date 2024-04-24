@@ -1,5 +1,6 @@
 mod parser{
     pub mod parser;
+    pub mod ast;
 }
 
 

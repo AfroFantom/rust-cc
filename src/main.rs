@@ -10,6 +10,8 @@ mod lexer {
     pub mod token;
 }
 use lexer::lexer::Lex;
+
+use crate::lexer::token::TokenType;
 //use parser::parser::Parser;
 //fn print(text:&Text){
 //    let mut idx =0 ;
@@ -23,4 +25,6 @@ fn main(){
     let mut lexer:Lex = Lex::seed();
     lexer.run();
     lexer.print();
+    
+
 }

@@ -1,29 +1,41 @@
+#[derive(PartialEq,Clone,Debug)]
 pub enum TokenType{
-    OPENBRACE,
-    CLOSEBRACE,
-    OPENPARENTHESIS,
-    CLOSEPARENTHESIS,
-    SEMICOLON,
-    GREATERTHAN,
-    LESSTHAN,
-    IF,
-    ELSE,
-    COMMA,
-    KEYWORD,
-    ASSIGN,
-    IDENTIFIER,
-    NIL,
-    NEWLINE,
-    WHITESPACE,
-    INTLITERAL,
-    EOF,
+    ASSIGN,                 // =
+    CLOSEBRACE,             // )
+    CLOSEPARENTHESIS,       // }
+    COMMA,                  // ,
+    ELSE,                   // else
+    ENDLINE,                // \0
+    EOF,                    // EOF
+    GREATERTHAN,            // <
+    IDENTIFIER,             // ident
+    IF,                     // if 
+    INTLITERAL,             // int values 
+    KEYWORD,                // reserved words 
+    LESSTHAN,               // >
+    NIL,                    // 
+    OPENBRACE,              // (
+    OPENPARENTHESIS,        // {
+    SEMICOLON,              // ;
+    WHITESPACE,             // " "
 }
+
+
+#[derive(Debug,Clone)]
 pub struct Token{
     class: TokenType,
     literal: String,
     start: usize,
     end: usize,
     line:usize,
+}
+
+impl Eq for Token{}
+
+impl PartialEq for Token{
+    fn eq(&self, other:&Self) -> bool{
+        self.class == other.class
+    }
 }
 
 
@@ -39,9 +51,9 @@ impl Token{
     }
     
 
-    pub fn get_class(&self) -> &TokenType{&self.class}
+    pub fn get_class(self) -> TokenType{self.class}
 
-    pub fn get_literal(&self) -> &String{&self.literal}
+    pub fn get_literal(self) -> String{self.literal}
     
 
 }

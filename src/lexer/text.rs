@@ -1,6 +1,8 @@
 use std::fs::File;
 use std::io::{BufRead,BufReader};
 
+#[derive(Debug,Clone)]
+
 pub struct Text{
     source: Vec<String>,
     line:usize,

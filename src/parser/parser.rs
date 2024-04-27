@@ -29,16 +29,12 @@ impl Parser{
     }
 
     pub fn parse_function(&mut self) -> Option<Fxn>{
-        let tok = self.lex.get_tok();
-        match tok.get_class() {
-            TokenType::KEYWORD => {
-                todo!()
-            }  
+        if self.lex.get_tok_class_cmp(TokenType::KEYWORD) {
 
-            _ => {
-                return None;
-            }
+        }else{
+            
         }
+        
     }
 
     pub fn parse_statement(&mut self){

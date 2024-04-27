@@ -1,5 +1,5 @@
 mod parser{
-    pub mod parser;
+    //pub mod parser;
     pub mod ast;
 }
 
@@ -9,8 +9,8 @@ mod lexer {
     pub mod text;
     pub mod token;
 }
-use lexer::lexer::Lex;
 
+use crate::lexer::lexer::Lex;
 use crate::lexer::token::TokenType;
 //use parser::parser::Parser;
 //fn print(text:&Text){
@@ -24,7 +24,9 @@ fn main(){
     //let _= print(&txt);
     let mut lexer:Lex = Lex::seed();
     lexer.run();
-    lexer.print();
-    
+    while !lexer.is_tokens_empty(){
+        let str=Lex::token_print(lexer.get_tok());
+        println!("tokentype {str}");
+    }  
 
 }

@@ -33,8 +33,8 @@ pub fn string_literal_tokeniser(literal:&String,start:usize,end:usize,line:usize
 pub fn char_literal_tokeniser(ch:char) -> TokenType{
     match ch{
         //' ' => {println!("lex.run() found a whitespace pass:{}",pass)},
-        ')' => return TokenType::OPENBRACE,
-        '(' => return TokenType::CLOSEBRACE,
+        ')' => return TokenType::CLOSEBRACE,
+        '(' => return TokenType::OPENBRACE,
         '{' => return TokenType::OPENPARENTHESIS,
         '}' => return TokenType::CLOSEPARENTHESIS,
         ';' => return TokenType::SEMICOLON,
@@ -42,8 +42,6 @@ pub fn char_literal_tokeniser(ch:char) -> TokenType{
         '>' => return TokenType::GREATERTHAN,
         '<' => return TokenType::LESSTHAN,
         '=' => return TokenType::ASSIGN,
-        '\0'=> return TokenType::ENDLINE, 
-        ' ' => return TokenType::WHITESPACE,
         _ => return TokenType::NIL,
     }
 }
@@ -53,7 +51,7 @@ pub fn char_literal_tokeniser(ch:char) -> TokenType{
 pub struct Lex{
     text: Text,
     tokens: VecDeque<Token>,
-    i:usize,
+    //i:usize,
 }
 
 impl Lex{
@@ -62,18 +60,26 @@ impl Lex{
     //    self.tokens.get(i).unwrap()
     //}
 
+    pub fn get_tok_class_cmp(&mut self, ttype: TokenType) -> bool {self.get_tok().get_class() == &ttype}
+    
+    //get_tok consumes tokens and consumes them again if the current one is nil 
+
     pub fn get_tok(&mut self) -> Token{
-        self.i+=1;
-        self.tokens.pop_front().unwrap()
+        let mut tok = self.tokens.pop_front().unwrap();
+        while tok.get_class() == &TokenType::NIL{
+            tok = self.tokens.pop_front().unwrap();    
+        }
+        tok
     }
 
-    pub fn peek_tok(&mut self) -> Token{
-        self.tokens.remove(1).unwrap()
+    pub fn peek(&mut self) -> &Token{
+        let mut tokens = self.tokens
+            .iter()
+            .peekable();
+        tokens.peek().unwrap()
     }
-
-    pub fn is_tokens_empty(&self) -> bool{
-        self.tokens.len() == 0
-    }
+                                                                                            
+    pub fn is_tokens_empty(&self) -> bool{self.tokens.len() == 0}
 
     pub fn get_tokens_len(&self) -> usize { 
         self.tokens.len() 
@@ -83,7 +89,6 @@ impl Lex{
         Self {
             text: (text),
             tokens: (VecDeque::new()),
-            i:(0)
          }
     }
     pub fn seed()->Lex{
@@ -202,8 +207,7 @@ impl Lex{
                             , self.text.get_line()))
     }
 
-    pub fn print(&self){
-        for token in & self.tokens{
+    pub fn token_print(token:Token) -> &'static str{
             let string;
             match token.clone().get_class() {
                 TokenType::OPENBRACE => string="OPENBRACE",
@@ -222,11 +226,9 @@ impl Lex{
                 TokenType::ELSE => string="ELSE",
                 TokenType::ASSIGN => string="=",
                 TokenType::NIL => string="NIL",
-                TokenType::ENDLINE => string="END",
-                TokenType::WHITESPACE => string="WHITESPACE",
             };
             //println!("ltrl:     {}  token:      {}",token.get_literal(),string);
-        }
+            string
    }
 }
 

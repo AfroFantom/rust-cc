@@ -5,7 +5,6 @@ pub enum TokenType{
     CLOSEPARENTHESIS,       // }
     COMMA,                  // ,
     ELSE,                   // else
-    ENDLINE,                // \0
     EOF,                    // EOF
     GREATERTHAN,            // <
     IDENTIFIER,             // ident
@@ -17,7 +16,6 @@ pub enum TokenType{
     OPENBRACE,              // (
     OPENPARENTHESIS,        // {
     SEMICOLON,              // ;
-    WHITESPACE,             // " "
 }
 
 
@@ -51,9 +49,9 @@ impl Token{
     }
     
 
-    pub fn get_class(self) -> TokenType{self.class}
+    pub fn get_class(&self) -> &TokenType{&self.class}
 
-    pub fn get_literal(self) -> String{self.literal}
+    pub fn get_literal(&self) -> &String{&self.literal}
     
 
 }
